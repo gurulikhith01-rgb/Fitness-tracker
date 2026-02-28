@@ -16,7 +16,6 @@ const TODAY = new Date(); TODAY.setHours(0,0,0,0);
 
 document.getElementById('header-date').innerText = TODAY.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' });
 
-// --- RECOVERY & STOPWATCH ---
 let stopwatchInt; let elapsed = 0;
 function toggleGymSession() {
     const btn = document.getElementById('session-btn');
@@ -40,8 +39,6 @@ let currentStars = 0; let sleepHours = 0;
 function setStars(n) {
     currentStars = n;
     document.querySelectorAll('#star-container span').forEach((s, i) => s.innerText = i < n ? '★' : '☆');
-    if (sleepHours > 0 && sleepHours < 5) document.querySelectorAll('#star-container span').forEach(s => s.classList.add('star-warning'));
-    else document.querySelectorAll('#star-container span').forEach(s => s.classList.remove('star-warning'));
 }
 function calculateSleep() {
     let bed = document.getElementById('bed-time').value; let wake = document.getElementById('wake-time').value;
@@ -50,28 +47,27 @@ function calculateSleep() {
     if(w <= b) w.setDate(w.getDate() + 1);
     sleepHours = (w - b) / 3600000;
     document.getElementById('sleep-result').innerText = `${Math.floor(sleepHours)}h ${Math.floor(((w-b)%3600000)/60000)}m`;
-    setStars(currentStars);
 }
 function saveSleepToCloud() {
     let dNum = Math.floor((TODAY - START_DATE)/(86400000)) + 1;
-    db.ref(`${USER_KEY}/sleep-${dNum}`).set({time: document.getElementById('sleep-result').innerText, stars: currentStars, danger: sleepHours < 5});
-    alert("Recovery synced.");
+    db.ref(`${USER_KEY}/sleep-${dNum}`).set({time: document.getElementById('sleep-result').innerText, stars: currentStars});
+    alert("Recovery metrics stored.");
 }
 function saveManualLog(d) {
     db.ref(`${USER_KEY}/note-${d}`).set(document.getElementById(`note-text-${d}`).value);
-    alert("Manual log saved.");
+    alert("Note saved.");
 }
 function closeTrophy() { document.getElementById('trophy-overlay').classList.add('trophy-hidden'); }
 
-// --- EXACT SCHEDULE DATA ---
+// --- CORRECT DATA SYNC ---
 const rawData = [
-    { am: "Treadmill + 1s Pushup/Squat + Crunches", b: "Kichidi (Moderate)", l: "Green Leave Pappu, Dondakaya Curry", s: "Guggillu", pm: "Plank, High Plank, Bird-Dog", d: "Bagara Rice + Protein" },
+    { am: "Treadmill + 1s Pushup/Squat + Crunches", b: "Kichidi", l: "Green Leave Pappu, Dondakaya Curry", s: "Guggillu", pm: "Plank, High Plank, Bird-Dog", d: "Bagara Rice + Protein" },
     { am: "Treadmill + 1s Pushup/Squat + Rev Crunches", b: "Idly (3-4 pcs)", l: "Pudhina Rice, Tomato Pappu", s: "White Senagalu", pm: "Bicycle Crunches, Leg Raises", d: "2 Chapathi + Aalu Curma" },
-    { am: "Treadmill + 1s Pushup/Squat + Bicycle Crunches", b: "Karam Dosa 1pc", l: "Green Leave Pappu, Bendakaya Pulusu", s: "two small pieces of watermelon", pm: "Plank, High Plank (No Side Planks)", d: "1.5c Egg Fried Rice" },
+    { am: "Treadmill + 1s Pushup/Squat + Bicycle Crunches", b: "Karam Dosa 1pc", l: "Green Leave Pappu, Bendakaya Pulusu", s: "Watermelon", pm: "Plank, High Plank", d: "1.5c Egg Fried Rice" },
     { am: "Treadmill + 1s Pushup/Squat + Russian Twists", b: "Idly (Skip Bonda)", l: "Pappu, Cabbage+Carrot Iguru", s: "Red Senagalu", pm: "Bicycle Crunches, Russian Twists", d: "2 Chapathi + Tomato Pappu" },
-    { am: "20m Incline Walk + Circuit (Lunges/Leg Raises)", b: "Puri (Max 2)", l: "Bisbilabath, Pesarapappu Iguru", s: "Seasonal Fruit", pm: "Plank, Bicycle Crunches, Leg Raises", d: "Bagara rice + Protin" }, // CORRECT SUNDAY
-    { am: "Treadmill + 1s Pushup/Squat + Leg Raises", b: "Idly (Skip Bonda)", l: "Green Leave Pappu, Arati Curry", s: "1 Masalawada (Max)", pm: "Plank, Bicycle Crunches", d: "2 Chapathi + Rajma Curma" },
-    { am: "Treadmill + 1s Pushup/Squat + Mt. Climbers", b: "Onion Dosa (1 pc)", l: "Dosakaya Pappu, Beerakaya Curry", s: "Tea/Milk (No Sweet)", pm: "Bicycle Crunches, Leg Raises", d: "1c Egg Curry + 0.5c Rice" }
+    { am: "20m Incline Walk + Circuit", b: "Puri (Max 2)", l: "Bisbilabath, Pesarapappu Iguru", s: "Seasonal Fruit", pm: "Plank, Bicycle Crunches, Leg Raises", d: "Bagara rice + Protin" }, // EXACT SUNDAY
+    { am: "Treadmill + 1s Pushup/Squat + Leg Raises", b: "Idly (Skip Bonda)", l: "Green Leave Pappu, Arati Curry", s: "1 Masalawada", pm: "Plank, Bicycle Crunches", d: "2 Chapathi + Rajma Curma" },
+    { am: "Treadmill + 1s Pushup/Squat + Mt. Climbers", b: "Onion Dosa", l: "Dosakaya Pappu, Beerakaya Curry", s: "Tea/Milk", pm: "Bicycle Crunches, Leg Raises", d: "1c Egg Curry + 0.5c Rice" }
 ];
 
 db.ref(USER_KEY).on('value', snap => {
@@ -83,6 +79,7 @@ db.ref(USER_KEY).on('value', snap => {
         const isD = data[`day-${i}`]; card.classList.toggle('completed', isD);
         card.querySelector('.day-cb').checked = isD;
         card.querySelector('.garlic-cb').checked = data[`garlic-${i}`];
+        card.querySelectorAll('.drop').forEach(dr => dr.classList.toggle('active', dr.getAttribute('data-val') <= (data[`water-${i}`] || 0)));
         if(data[`note-${i}`]) document.getElementById(`note-text-${i}`).value = data[`note-${i}`];
         if(isD) done++;
     }
@@ -103,7 +100,8 @@ for (let i = 1; i <= 30; i++) {
             <strong>Day ${i}</strong>
             <small style="font-weight:800; color:#64748b">${dDate.toLocaleDateString('en-US',{weekday:'short', month:'short', day:'numeric'})}</small>
         </div>
-        <div style="font-size:0.6rem; color:#ef4444; background:rgba(239,68,68,0.05); padding:8px; border-radius:10px; margin:15px 0; font-weight:800; border: 1px solid rgba(239,68,68,0.1);">
+        <div class="water-row">${[1,2,3,4].map(n => `<span class="drop" data-val="${n}">💧</span>`).join('')}</div>
+        <div style="font-size:0.6rem; color:#ef4444; background:rgba(239,68,68,0.05); padding:8px; border-radius:10px; margin:10px 0; font-weight:800; border: 1px solid rgba(239,68,68,0.1);">
             <input type="checkbox" class="garlic-cb" id="g-${i}"> <label for="g-${i}">🧄 RAW GARLIC HABIT</label>
         </div>
         <div class="item-row">🌅 AM: ${d.am}</div>
@@ -119,6 +117,7 @@ for (let i = 1; i <= 30; i++) {
     `;
     card.querySelector('.day-cb').onchange = (e) => db.ref(`${USER_KEY}/day-${i}`).set(e.target.checked);
     card.querySelector('.garlic-cb').onchange = (e) => db.ref(`${USER_KEY}/garlic-${i}`).set(e.target.checked);
+    card.querySelectorAll('.drop').forEach(dr => dr.onclick = () => db.ref(`${USER_KEY}/water-${i}`).set(dr.getAttribute('data-val')));
     grid.appendChild(card);
 }
 document.getElementById('reset-btn').onclick = () => { if(confirm("Clear data?")) db.ref(USER_KEY).remove(); };
