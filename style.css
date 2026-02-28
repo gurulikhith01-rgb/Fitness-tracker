@@ -1,38 +1,76 @@
 :root {
-    --primary: #020617; --surface: #0f172a; --accent: #10b981; 
-    --today: #3b82f6; --danger: #ef4444; --text-main: #f8fafc; --text-dim: #94a3b8;
+    --bg: #020617; --side: #0f172a; --blue: #3b82f6; --green: #10b981; --red: #ef4444;
 }
-body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background-color: var(--primary); color: var(--text-main); }
-.dashboard-wrapper { display: flex; min-height: 100vh; }
-.sidebar { width: 340px; background: var(--surface); padding: 30px; position: fixed; height: 100vh; display: flex; flex-direction: column; border-right: 1px solid rgba(255,255,255,0.05); }
-.avatar-circle { width: 48px; height: 48px; background: linear-gradient(135deg, var(--today), var(--accent)); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; }
-.user-profile { display: flex; align-items: center; gap: 15px; margin-bottom: 35px; }
-.user-name { font-size: 1rem; margin: 0; font-weight: 800; }
-.subtitle { font-size: 0.65rem; color: var(--accent); font-weight: 700; text-transform: uppercase; }
-.pro-timer { font-size: 2.5rem; font-family: 'Courier New', monospace; font-weight: 800; color: var(--today); text-align: center; margin-bottom: 15px; text-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
-.pro-btn { width: 100%; border: none; padding: 14px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
-.start-btn { background: var(--today); color: white; }
-.sleep-box { background: rgba(255, 255, 255, 0.03); padding: 18px; border-radius: 20px; text-align: center; }
-.time-inputs input { background: #1e293b; border: 1px solid #334155; color: white; padding: 8px; border-radius: 8px; width: 45%; font-size: 0.8rem; }
-#sleep-result { font-size: 1.8rem; font-weight: 800; color: var(--accent); }
-.star-rating { font-size: 1.5rem; color: #fbbf24; cursor: pointer; }
-.star-warning { color: var(--danger) !important; }
-.rule-item { background: rgba(239, 68, 68, 0.05); padding: 12px; border-radius: 10px; font-size: 0.7rem; font-weight: 800; border-left: 3px solid var(--danger); margin-bottom: 8px; color: #fca5a5; }
-.content-body { margin-left: 340px; padding: 40px; width: calc(100% - 340px); background: #f8fafc; color: #1e293b; }
-.progress-track { background: #e2e8f0; height: 8px; border-radius: 10px; width: 200px; overflow: hidden; }
-#progress-fill { background: var(--accent); height: 100%; width: 0%; transition: 1s ease; }
-.workout-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 25px; }
-.card { background: white; border-radius: 24px; padding: 25px; border: 1px solid #e2e8f0; position: relative; }
-.card.completed { background: #f0fdf4; border-color: var(--accent); }
-.card.is-today { border: 2.5px solid var(--today); box-shadow: 0 10px 25px rgba(59,130,246,0.1); }
-.exercise-item { background: #f1f5f9; padding: 8px 12px; border-radius: 10px; margin-bottom: 6px; font-size: 0.75rem; font-weight: 700; border-left: 4px solid var(--today); }
-.diet-item { display: inline-block; background: #fffbeb; color: #92400e; padding: 5px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; margin: 2px; }
-.drop { cursor: pointer; font-size: 1.4rem; opacity: 0.2; filter: grayscale(1); }
-.drop.active { opacity: 1; filter: grayscale(0); }
-.manual-log-section textarea { width: 100%; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; font-family: inherit; font-size: 0.75rem; resize: none; box-sizing: border-box; }
-.manual-log-section button { margin-top: 8px; background: var(--primary); color: white; border: none; padding: 8px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; cursor: pointer; width: 100%; }
-#trophy-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 6, 23, 0.95); z-index: 9999; display: flex; align-items: center; justify-content: center; }
-.trophy-hidden { visibility: hidden; opacity: 0; transform: scale(0.8); }
-.trophy-card { background: var(--surface); padding: 40px; border-radius: 30px; text-align: center; border: 2px solid #fbbf24; }
-.danger-btn { width: 100%; background: transparent; color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); padding: 12px; border-radius: 10px; font-weight: 800; cursor: pointer; }
-@media (max-width: 1000px) { .sidebar { width: 100%; position: relative; height: auto; } .content-body { margin-left: 0; width: 100%; } }
+
+* { box-sizing: border-box; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background: var(--bg); color: white; overflow: hidden; }
+
+/* FIX: This grid separates the sidebar and content so they NEVER overlap */
+.app-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    height: 100vh;
+}
+
+.sidebar {
+    background: var(--side);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid rgba(255,255,255,0.05);
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.brand { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
+.logo { width: 38px; height: 38px; background: linear-gradient(135deg, var(--blue), var(--green)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; }
+.u-name { font-size: 0.8rem; font-weight: 800; }
+.u-badge { font-size: 0.6rem; color: var(--green); font-weight: 900; letter-spacing: 1px; }
+
+.side-item { margin-bottom: 30px; }
+.side-item label { font-size: 0.6rem; font-weight: 900; color: #64748b; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px; }
+.timer-display { font-size: 2rem; font-family: monospace; font-weight: 800; color: var(--blue); text-align: center; margin-bottom: 15px; }
+
+.time-row { display: flex; gap: 8px; margin-bottom: 10px; }
+.time-row input { background: #1e293b; border: 1px solid #334155; color: white; padding: 6px; border-radius: 6px; width: 100%; font-size: 0.75rem; }
+.sleep-stat { font-size: 1.4rem; color: var(--green); text-align: center; font-weight: 800; margin: 8px 0; }
+.stars { text-align: center; font-size: 1.2rem; color: #fbbf24; cursor: pointer; margin-bottom: 10px; }
+.star-warning { color: var(--red) !important; }
+
+.rule-box { font-size: 0.7rem; font-weight: 700; color: #fca5a5; background: rgba(239, 68, 68, 0.08); padding: 8px; border-radius: 6px; margin-bottom: 6px; border-left: 3px solid var(--red); }
+
+.btn-blue { width: 100%; background: var(--blue); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 800; cursor: pointer; }
+.btn-ghost { width: 100%; background: transparent; border: 1px solid var(--blue); color: var(--blue); padding: 10px; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 0.7rem; }
+.btn-danger { margin-top: auto; background: transparent; border: 1px solid rgba(239,68,68,0.3); color: var(--red); padding: 10px; border-radius: 10px; cursor: pointer; font-size: 0.65rem; }
+
+/* Dashboard Content */
+.dashboard {
+    background: #f8fafc;
+    color: #1e293b;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.top-nav { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; }
+.top-nav h1 { margin: 0; font-size: 1.5rem; font-weight: 800; color: #0f172a; }
+.bar-bg { width: 220px; height: 8px; background: #e2e8f0; border-radius: 10px; overflow: hidden; margin-top: 8px; }
+#progress-fill { height: 100%; background: var(--green); width: 0%; transition: 1s ease; }
+
+.workout-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+.card { background: white; border-radius: 20px; padding: 25px; border: 1px solid #e2e8f0; position: relative; }
+.card.is-today { border: 2.5px solid var(--blue); box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1); }
+.card.completed { background: #f0fdf4; border-color: var(--green); opacity: 0.95; }
+
+.item-row { background: #f1f5f9; padding: 12px; border-radius: 12px; border-left: 4px solid var(--blue); font-size: 0.75rem; font-weight: 700; margin-bottom: 12px; }
+.diet-stack { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px; }
+.tag { background: #fffbeb; color: #92400e; padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 800; border: 1px solid #fef3c7; }
+
+.manual-entry { margin-top: 15px; border-top: 1px dashed #cbd5e1; padding-top: 15px; }
+.manual-entry textarea { width: 100%; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; font-size: 0.7rem; font-family: inherit; resize: none; background: #f8fafc; }
+.manual-entry button { width: 100%; background: #0f172a; color: white; border: none; padding: 8px; border-radius: 8px; margin-top: 5px; cursor: pointer; font-weight: 800; }
+
+@media (max-width: 950px) {
+    .app-layout { grid-template-columns: 1fr; }
+    .sidebar { width: 100%; height: auto; position: relative; }
+    .dashboard { margin-top: 0; }
+}

@@ -3,82 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>30-Day Elite | U.Guru Likhith Reddy</title>
+    <title>30-Day Elite | Nani</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
-<body id="app-body">
+<body>
     <div id="trophy-overlay" class="trophy-hidden">
         <div class="trophy-card">
             <div class="trophy-icon">🏆</div>
             <h1>CHAMPION STATUS</h1>
-            <p>Congratulations, Nani! 30 Days of Pure Discipline.</p>
+            <p>30 Days of Absolute Discipline. Great work, Nani!</p>
             <button onclick="closeTrophy()">CONTINUE</button>
         </div>
     </div>
 
-    <div class="dashboard-wrapper">
-        <aside class="sidebar no-print">
-            <div class="user-profile">
-                <div class="avatar-circle">N</div>
-                <div class="profile-text">
-                    <h1 class="user-name">U.Guru Likhith Reddy</h1>
-                    <p class="subtitle">Elite 30-Day Protocol</p>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo">N</div>
+                <div class="brand-text">
+                    <div class="u-name">U.Guru Likhith Reddy</div>
+                    <div class="u-badge">ELITE PROTOCOL</div>
                 </div>
             </div>
 
-            <div class="sidebar-section">
-                <div class="section-tag">LIVE GYM SESSION</div>
-                <div class="stopwatch-container">
-                    <div id="stopwatch-text" class="pro-timer">00:00:00</div>
-                    <button onclick="toggleGymSession()" id="session-btn" class="pro-btn start-btn">START SESSION</button>
-                </div>
+            <div class="side-item">
+                <label>LIVE SESSION</label>
+                <div id="stopwatch-text" class="timer-display">00:00:00</div>
+                <button onclick="toggleGymSession()" id="session-btn" class="btn-blue">START SESSION</button>
             </div>
 
-            <div class="sidebar-section">
-                <div class="section-tag">RECOVERY MONITOR</div>
-                <div class="sleep-box">
-                    <div class="time-label-row"><span>BED</span><span>WAKE</span></div>
-                    <div class="time-inputs">
-                        <input type="time" id="bed-time" onchange="calculateSleep()">
-                        <span class="to-arrow">→</span>
-                        <input type="time" id="wake-time" onchange="calculateSleep()">
-                    </div>
-                    <div class="sleep-display">
-                        <span id="sleep-result">0h 0m</span>
-                        <div class="star-rating" id="star-container">
-                            <span onclick="setStars(1)">☆</span><span onclick="setStars(2)">☆</span><span onclick="setStars(3)">☆</span><span onclick="setStars(4)">☆</span><span onclick="setStars(5)">☆</span>
-                        </div>
-                    </div>
-                    <button onclick="saveSleepToCloud()" class="pro-btn recovery-btn">LOG RECOVERY</button>
+            <div class="side-item">
+                <label>RECOVERY MONITOR</label>
+                <div class="time-row">
+                    <input type="time" id="bed-time" onchange="calculateSleep()">
+                    <input type="time" id="wake-time" onchange="calculateSleep()">
                 </div>
+                <div class="sleep-stat" id="sleep-result">0h 0m</div>
+                <div class="stars" id="star-container">
+                    <span onclick="setStars(1)">☆</span><span onclick="setStars(2)">☆</span><span onclick="setStars(3)">☆</span><span onclick="setStars(4)">☆</span><span onclick="setStars(5)">☆</span>
+                </div>
+                <button onclick="saveSleepToCloud()" class="btn-ghost">LOG RECOVERY</button>
             </div>
 
-            <div class="sidebar-section">
-                <div class="section-tag">CORE DISCIPLINE</div>
-                <div class="rules-stack">
-                    <div class="rule-item">🚫 NO SUGAR / SWEETS</div>
-                    <div class="rule-item">🥛 NO RAW CURD</div>
-                    <div class="rule-item">🛑 NO SIDE PLANKS</div>
-                </div>
+            <div class="side-item rules">
+                <label>STRICT RULES</label>
+                <div class="rule-box">🚫 No Sugar</div>
+                <div class="rule-box">🥛 No Raw Curd</div>
+                <div class="rule-box">🛑 No Side Planks</div>
             </div>
 
-            <div class="sidebar-footer">
-                <button id="reset-btn" class="action-btn danger-btn">RESET DATA</button>
-            </div>
+            <button id="reset-btn" class="btn-danger">RESET CLOUD DATA</button>
         </aside>
 
-        <main class="content-body">
-            <header class="main-header">
-                <div class="header-left">
-                    <h2>Activity & Nutrition Dashboard</h2>
-                    <div class="current-status">Today: <strong id="header-date">...</strong></div>
+        <main class="dashboard">
+            <header class="top-nav">
+                <div>
+                    <h1>Active Evolution</h1>
+                    <p id="header-date">...</p>
                 </div>
-                <div class="progress-info">
-                    <div class="prog-text">Total Progress: <span id="pct-text">0%</span></div>
-                    <div class="progress-track"><div id="progress-fill"></div></div>
+                <div class="prog-wrapper">
+                    <div class="prog-label">Completion: <span id="pct-text">0%</span></div>
+                    <div class="bar-bg"><div id="progress-fill"></div></div>
                 </div>
             </header>
+
             <div id="workout-grid" class="workout-grid"></div>
         </main>
     </div>
