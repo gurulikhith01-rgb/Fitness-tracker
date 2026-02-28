@@ -1,57 +1,81 @@
-/* START DATE: Feb 25, 2026 */
+/* FIREBASE CONFIGURATION */
+const firebaseConfig = {
+  apiKey: "AIzaSyDiC6U5wU1HufsKonu0yZ7GZtqVw8woEnk",
+  authDomain: "fitness-tracker-1fe61.firebaseapp.com",
+  databaseURL: "https://fitness-tracker-1fe61-default-rtdb.firebaseio.com",
+  projectId: "fitness-tracker-1fe61",
+  storageBucket: "fitness-tracker-1fe61.appspot.com",
+  messagingSenderId: "1098616149591",
+  appId: "1:1098616149591:web:d27457731236100c56360c"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const USER_PATH = "U_Guru_Likhith_Reddy";
+
 const START_DATE = new Date(2026, 1, 25);
 const TODAY = new Date(); TODAY.setHours(0,0,0,0);
 
 document.getElementById('header-date').innerText = TODAY.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
-/* FULL 30-DAY SCHEDULE DATA FROM CSV */
 const schedule = [
-    { am: "Treadmill + 1s Pushup/Squat + Crunches", pm: "Plank, High Plank, Bird-Dog", b: "Kichidi (Moderate)", l: "Green Leave Pappu, Dondakaya Curry", s: "Guggillu", d: "Bagara Rice + Protein" },
-    { am: "Treadmill + 1s Pushup/Squat + Rev Crunches", pm: "Bicycle Crunches, Leg Raises", b: "Idly (3-4 pcs)", l: "Pudhina Rice, Tomato Pappu", s: "White Senagalu", d: "2 Chapathi + Aalu Curma" },
-    { am: "Treadmill + 1s Pushup/Squat + Bicycle Crunches", pm: "Plank, High Plank (No Side Planks)", b: "Karam Dosa 1pc", l: "Green Leave Pappu, Bendakaya Pulusu", s: "Watermelon Pieces", d: "1.5c Egg Fried Rice" },
-    { am: "Treadmill + 1s Pushup/Squat + Russian Twists", pm: "Bicycle Crunches, Russian Twists", b: "Idly (Skip Bonda)", l: "Pappu, Cabbage+Carrot Iguru", s: "Red Senagalu", d: "2 Chapathi + Tomato Pappu" },
-    { am: "20m Incline Walk + 3s Lunges", pm: "Active Rest Walk", b: "Upma", l: "Mixed Veg Curry", s: "Roasted Chana", d: "1 Chapathi + Veg Bowl" }
+    { am: "Treadmill + Pushups/Squat + Crunches", pm: "Plank, High Plank, Bird-Dog", b: "Kichidi", bq: "1 Bowl", l: "Dondakaya Curry", lq: "2 Scoops + Fist Rice", s: "Guggillu", sq: "Half Cup", d: "Bagara Rice", dq: "1 Cup" },
+    { am: "Treadmill + Pushups/Squat + Rev Crunches", pm: "Bicycle Crunches, Leg Raises", b: "Idly", bq: "3-4 Pcs", l: "Tomato Pappu", lq: "2 Scoops + Fist Rice", s: "White Senagalu", sq: "Bowl", d: "2 Chapathi", dq: "2 Pcs" },
+    { am: "Treadmill + Pushups/Squat + Bicycle Crunches", pm: "Plank (No Side Planks)", b: "Karam Dosa", bq: "1 Pc", l: "Bendakaya Pulusu", lq: "2 Scoops + Fist Rice", s: "Watermelon", sq: "3 Pcs", d: "Egg Fried Rice", dq: "1.5 Cups" },
+    { am: "Treadmill + Pushups/Squat + Russian Twists", pm: "Bicycle Crunches, Russian Twists", b: "Idly", bq: "4 Pcs", l: "Cabbage Carrot", lq: "2 Scoops + Fist Rice", s: "Red Senagalu", sq: "Bowl", d: "2 Chapathi", dq: "2 Pcs" },
+    { am: "20m Incline Walk + 3s Lunges", pm: "Active Rest Walk", b: "Upma", bq: "1 Bowl", l: "Mixed Veg Curry", lq: "Large Portion", s: "Roasted Chana", sq: "Handful", d: "1 Chapathi", dq: "1 Pc + Veg" }
 ];
 
 const grid = document.getElementById('workout-grid');
 
-function updateGlobalStats() {
-    const total = 30;
-    const completed = document.querySelectorAll('.day-cb:checked').length;
-    const pct = Math.round((completed / total) * 100);
-    document.getElementById('progress-fill').style.width = pct + '%';
-    document.getElementById('pct-text').innerText = pct + '%';
+// SYNC DATA FROM CLOUD
+function syncFromCloud() {
+    db.ref(USER_PATH).on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        
+        let completedCount = 0;
+        for (let i = 1; i <= 30; i++) {
+            const card = document.getElementById(`card-${i}`);
+            if (!card) continue;
 
-    let streak = 0;
-    for(let i=1; i<=30; i++) {
-        if(localStorage.getItem(`nani-day-${i}`) === 'true') streak++;
-        else break;
-    }
-    document.getElementById('streak-count').innerText = streak;
-}
+            const isDone = data[`day-${i}`] || false;
+            const isGarlic = data[`garlic-${i}`] || false;
+            const waterLvl = data[`water-${i}`] || 0;
 
-function renderExtras(day, container) {
-    container.innerHTML = '';
-    const items = JSON.parse(localStorage.getItem(`extras-${day}`) || "[]");
-    items.forEach(text => {
-        const li = document.createElement('li');
-        li.className = 'extra-item';
-        li.innerText = `+ ${text}`;
-        container.appendChild(li);
+            card.classList.toggle('completed', isDone);
+            card.querySelector('.day-cb').checked = isDone;
+            card.querySelector('.garlic-cb').checked = isGarlic;
+            
+            card.querySelectorAll('.drop').forEach(dr => {
+                dr.classList.toggle('active', dr.getAttribute('data-val') <= waterLvl);
+            });
+
+            if (isDone) completedCount++;
+        }
+
+        const pct = Math.round((completedCount / 30) * 100);
+        document.getElementById('progress-fill').style.width = pct + '%';
+        document.getElementById('pct-text').innerText = pct + '%';
+        
+        let streak = 0;
+        for(let i=1; i<=30; i++) {
+            if(data[`day-${i}`]) streak++;
+            else break;
+        }
+        document.getElementById('streak-count').innerText = streak;
     });
 }
 
+// GENERATE GRID
 for (let i = 1; i <= 30; i++) {
     const d = new Date(START_DATE); d.setDate(START_DATE.getDate() + (i-1));
     const isToday = d.getTime() === TODAY.getTime();
     const data = schedule[(i-1) % schedule.length];
-    
-    const daySaved = localStorage.getItem(`nani-day-${i}`) === 'true';
-    const garlicSaved = localStorage.getItem(`nani-garlic-${i}`) === 'true';
-    const waterLevel = parseInt(localStorage.getItem(`nani-water-${i}`)) || 0;
 
     const card = document.createElement('div');
-    card.className = `card ${daySaved ? 'completed' : ''} ${isToday ? 'is-today' : ''}`;
+    card.id = `card-${i}`;
+    card.className = `card ${isToday ? 'is-today' : ''}`;
     card.innerHTML = `
         <div style="display:flex; align-items:center; margin-bottom:10px;">
             <h3 style="margin:0; font-size:1.1rem; font-weight:800;">Day ${i}</h3>
@@ -60,12 +84,12 @@ for (let i = 1; i <= 30; i++) {
         </div>
 
         <div class="water-tracker no-print">
-            ${[1,2,3,4].map(n => `<span class="drop ${n <= waterLevel ? 'active' : ''}" data-val="${n}">💧</span>`).join('')}
-            <small style="margin-left:auto; font-size:0.6rem; opacity:0.6">4L WATER GOAL</small>
+            ${[1,2,3,4].map(n => `<span class="drop" data-val="${n}">💧</span>`).join('')}
+            <small style="margin-left:auto; font-size:0.6rem; opacity:0.6">4L WATER</small>
         </div>
 
         <div class="habit-row">
-            <input type="checkbox" class="garlic-cb no-print" id="g-${i}" ${garlicSaved ? 'checked' : ''}>
+            <input type="checkbox" class="garlic-cb no-print" id="g-${i}">
             <label for="g-${i}" style="cursor:pointer">🧄 Raw Garlic (06:40 AM)</label>
         </div>
 
@@ -75,55 +99,27 @@ for (let i = 1; i <= 30; i++) {
         </div>
 
         <div class="diet-box">
-            🍳 ${data.b} | 🍲 ${data.l}<br>
-            🍎 ${data.s} | 🫓 ${data.d}
-        </div>
-
-        <div class="extra-section no-print">
-            <div class="extra-input-group">
-                <input type="text" class="extra-input" placeholder="Extra workout..." id="in-${i}">
-                <button class="add-btn" id="btn-${i}">+</button>
-            </div>
-            <ul class="extra-list" id="list-${i}"></ul>
+            🍳 ${data.b} <span class="portion-tag">${data.bq}</span> | 🍲 ${data.l} <span class="portion-tag">${data.lq}</span><br>
+            🫓 ${data.d} <span class="portion-tag">${data.dq}</span>
         </div>
 
         <div style="margin-top:15px; border-top:1px solid #eee; padding-top:10px;" class="no-print">
-            <input type="checkbox" class="day-cb" id="d-${i}" ${daySaved ? 'checked' : ''}>
+            <input type="checkbox" class="day-cb" id="d-${i}">
             <label for="d-${i}" style="font-weight:800; cursor:pointer;">SESSION COMPLETE</label>
         </div>
     `;
 
-    /* WATER LOGIC */
+    // SYNC ON CLICK
+    card.querySelector('.day-cb').onchange = (e) => db.ref(`${USER_PATH}/day-${i}`).set(e.target.checked);
+    card.querySelector('.garlic-cb').onchange = (e) => db.ref(`${USER_PATH}/garlic-${i}`).set(e.target.checked);
     card.querySelectorAll('.drop').forEach(dr => {
-        dr.onclick = () => {
-            const val = dr.getAttribute('data-val');
-            localStorage.setItem(`nani-water-${i}`, val);
-            card.querySelectorAll('.drop').forEach(d2 => d2.classList.toggle('active', d2.getAttribute('data-val') <= val));
-        }
+        dr.onclick = () => db.ref(`${USER_PATH}/water-${i}`).set(dr.getAttribute('data-val'));
     });
-
-    /* EXTRA ACTIVITY LOGIC */
-    const extraList = card.querySelector(`#list-${i}`);
-    renderExtras(i, extraList);
-    card.querySelector(`#btn-${i}`).onclick = () => {
-        const val = card.querySelector(`#in-${i}`).value.trim();
-        if(!val) return;
-        const list = JSON.parse(localStorage.getItem(`extras-${i}`) || "[]");
-        list.push(val); localStorage.setItem(`extras-${i}`, JSON.stringify(list));
-        card.querySelector(`#in-${i}`).value = ''; renderExtras(i, extraList);
-    };
-
-    /* SAVE LOGIC */
-    card.querySelector('.garlic-cb').onclick = (e) => localStorage.setItem(`nani-garlic-${i}`, e.target.checked);
-    card.querySelector('.day-cb').onclick = (e) => {
-        localStorage.setItem(`nani-day-${i}`, e.target.checked);
-        card.classList.toggle('completed', e.target.checked);
-        updateGlobalStats();
-    };
 
     grid.appendChild(card);
 }
 
 document.getElementById('print-btn').onclick = () => window.print();
-document.getElementById('reset-btn').onclick = () => { if(confirm("Clear progress?")) { localStorage.clear(); location.reload(); }};
-updateGlobalStats();
+document.getElementById('reset-btn').onclick = () => { if(confirm("Clear all cloud data?")) db.ref(USER_PATH).remove(); };
+
+syncFromCloud();
