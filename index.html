@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30-Day Fitness Dashboard | U.Guru Likhith Reddy</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar no-print">
+            <div class="user-profile">
+                <h1 class="user-name">U.Guru Likhith Reddy</h1>
+                <p class="subtitle">30-Day Fat Burn Challenge</p>
+            </div>
+
+            <div class="streak-widget">
+                <span class="streak-icon">🔥</span>
+                <div class="streak-info">
+                    <strong id="streak-count">0</strong>
+                    <span>Discipline Streak</span>
+                </div>
+            </div>
+
+            <div class="progress-widget">
+                <div class="widget-header">
+                    <span>Overall Progress</span>
+                    <span id="pct-text">0%</span>
+                </div>
+                <div class="progress-track"><div id="progress-fill"></div></div>
+            </div>
+
+            <div class="portion-guide">
+                <h3>PORTION CONTROL GUIDE</h3>
+                <div class="p-item">🍚 <strong>Rice:</strong> 1 Small Cup (Fist size)</div>
+                <div class="p-item">🫓 <strong>Chapathi:</strong> Max 2 (No Oil)</div>
+                <div class="p-item">🍲 <strong>Curry:</strong> 2 Large Scoops</div>
+            </div>
+
+            <nav class="sidebar-rules">
+                <h3>CORE DISCIPLINE</h3>
+                <div class="rule-chip">🚫 No Sugar / Sweets</div>
+                <div class="rule-chip">🥛 No Raw Curd</div>
+                <div class="rule-chip">🛑 No Side Planks</div>
+            </nav>
+
+            <button id="reset-btn">Reset All Progress</button>
+        </aside>
+
+        <main class="content-body">
+            <header class="main-header">
+                <div>
+                    <h2 style="margin:0">Activity & Nutrition Log</h2>
+                    <div class="current-status">Today: <strong id="header-date">...</strong></div>
+                </div>
+                <button id="print-btn" class="no-print">🖨️ Print Plan</button>
+            </header>
+            <div id="workout-grid" class="workout-grid"></div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

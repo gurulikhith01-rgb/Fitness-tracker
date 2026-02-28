@@ -1,0 +1,62 @@
+:root {
+    --primary: #0f172a; 
+    --accent: #10b981; 
+    --today: #3b82f6; 
+    --bg: #f8fafc; 
+    --white: #ffffff;
+}
+
+body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background-color: var(--bg); color: #334155; }
+.dashboard-wrapper { display: flex; min-height: 100vh; }
+
+/* Sidebar */
+.sidebar { width: 320px; background: var(--primary); color: white; padding: 40px 30px; position: fixed; height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; overflow-y: auto; z-index: 100; }
+.user-name { margin: 0; font-weight: 800; font-size: 1.3rem; line-height: 1.2; }
+.subtitle { margin: 5px 0; font-size: 0.8rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+.streak-widget { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; margin: 25px 0; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(16, 185, 129, 0.3); }
+.streak-info strong { display: block; font-size: 1.1rem; }
+.streak-info span { font-size: 0.65rem; opacity: 0.6; }
+
+.progress-track { background: #334155; height: 8px; border-radius: 10px; margin-top: 8px; overflow: hidden; }
+#progress-fill { background: var(--accent); height: 100%; width: 0%; transition: width 0.6s ease; }
+
+.portion-guide { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 10px; margin: 20px 0; }
+.p-item { font-size: 0.7rem; margin-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px; }
+.rule-chip { background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; margin-bottom: 6px; font-size: 0.75rem; border-left: 3px solid var(--accent); }
+
+/* Main Content */
+.content-body { margin-left: 320px; padding: 40px; width: calc(100% - 320px); box-sizing: border-box; }
+.main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.workout-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 25px; }
+
+#print-btn { background: var(--white); border: 1px solid #cbd5e1; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
+
+.card { background: var(--white); border-radius: 20px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: 0.3s ease; position: relative; }
+.card.completed { border-color: var(--accent); background: #f0fdf4; opacity: 0.9; }
+.card.is-today { border: 2.5px solid var(--today); box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2); transform: translateY(-5px); z-index: 10; }
+
+.water-tracker { display: flex; gap: 6px; margin: 12px 0; align-items: center; }
+.drop { cursor: pointer; font-size: 1.1rem; opacity: 0.2; }
+.drop.active { opacity: 1; filter: drop-shadow(0 0 5px #3b82f6); }
+
+.habit-row { background: #fff1f2; padding: 10px; border-radius: 10px; display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 0.8rem; color: #991b1b; margin-bottom: 12px; }
+.workout-box { background: #f1f5f9; padding: 12px; border-radius: 10px; border-left: 4px solid var(--today); font-size: 0.8rem; margin-bottom: 10px; line-height: 1.4; }
+.diet-box { background: #fffbeb; padding: 12px; border-radius: 10px; border-left: 4px solid #f59e0b; font-size: 0.8rem; line-height: 1.6; }
+
+/* Extra Activity Logger */
+.extra-section { margin-top: 15px; padding-top: 10px; border-top: 1px dashed #e2e8f0; }
+.extra-input-group { display: flex; gap: 5px; margin-bottom: 8px; }
+.extra-input { flex: 1; border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 10px; font-size: 0.75rem; }
+.add-btn { background: var(--primary); color: white; border: none; border-radius: 6px; padding: 0 10px; cursor: pointer; font-weight: bold; }
+.extra-list { list-style: none; padding: 0; margin: 0; }
+.extra-item { background: #f8fafc; font-size: 0.65rem; padding: 3px 8px; border-radius: 4px; margin-bottom: 3px; border-left: 2px solid var(--accent); }
+
+#reset-btn { margin-top: auto; background: transparent; border: 1px solid #ef4444; color: #ef4444; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 0.75rem; font-weight: 600; }
+
+@media print {
+    .no-print { display: none !important; }
+    .content-body { margin-left: 0; padding: 0; width: 100%; }
+    .workout-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+    .card { page-break-inside: avoid; border: 1px solid #000; box-shadow: none; margin-bottom: 10px; }
+}
