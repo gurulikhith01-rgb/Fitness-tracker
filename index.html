@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Extreme Pro | U. GURU LIKHITH REDDY</title>
+    <title>Quantum Zenith | Nani</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="zenith-container">
@@ -20,30 +20,39 @@
                 <div class="module-stack">
                     <div class="module glass alert-pulse">
                         <label class="section-tag">DIET PROTOCOL</label>
-                        <div id="sidebar-next-meal" class="telemetry-value">Syncing Data...</div>
+                        <div id="sidebar-next-meal" class="telemetry-value">Syncing...</div>
                     </div>
 
-                    <div class="telemetry-grid">
-                        <div class="module glass mini">
-                            <label class="section-tag">UPTIME</label>
-                            <div id="real-time-clock" class="mono-data emerald">00:00:00</div>
-                        </div>
-                        <div class="module glass mini">
-                            <label class="section-tag">STREAK</label>
-                            <div id="streak-display" class="mono-data gold">🔥 0</div>
-                        </div>
+                    <div class="module glass">
+                        <label class="section-tag">UPTIME</label>
+                        <div id="real-time-clock" class="mono-data emerald">00:00:00</div>
                     </div>
 
-                    <div class="engine-glass">
+                    <div class="module glass rules-module">
+                        <label class="section-tag">EVOLUTION ARCHITECTURE</label>
+                        <ul class="protocol-list">
+                            <li><span>🚫</span> No Sweets (Permanent)</li>
+                            <li><span>🥛</span> No Curd / Raw Curd</li>
+                            <li><span>🚫</span> No Side-Planks</li>
+                            <li><span>🏃</span> Treadmill Cardio Prime</li>
+                        </ul>
+                    </div>
+
+                    <div class="engine-glass" id="engine-container">
+                        <div class="scan-line"></div>
                         <label class="section-tag">ZENITH ENGINE</label>
                         <div id="stopwatch-text" class="timer-display blue">00:00:00</div>
-                        <div class="engine-subtext">SYSTEM STANDBY</div>
+                        <div id="engine-status" class="engine-subtext">SYSTEM STANDBY</div>
                     </div>
                 </div>
 
                 <div class="sidebar-footer">
-                    <button onclick="window.print()" class="btn-sidebar-archive">🖨️ EXPORT FULL ARCHIVE</button>
-                    <button id="reset-btn" class="btn-sidebar-wipe">🗑️ WIPE CLOUD HISTORY</button>
+                    <button id="main-archive-print" class="btn-command primary">
+                        <span class="btn-content">🖨️ EXPORT FULL ARCHIVE</span>
+                    </button>
+                    <button id="reset-btn" class="btn-command danger" onclick="if(confirm('Wipe Neural Core History?')) db.ref(USER_KEY).remove()">
+                        <span class="btn-content">⚠️ WIPE NEURAL CORE</span>
+                    </button>
                 </div>
             </div>
         </aside>
@@ -66,11 +75,9 @@
                     </div>
                 </div>
             </header>
-
             <div id="workout-grid" class="rigid-grid"></div>
         </main>
     </div>
-
     <canvas id="victory-canvas" class="no-print"></canvas>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
