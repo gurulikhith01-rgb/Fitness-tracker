@@ -3,74 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>30-Day Elite | Nani</title>
+    <title>Extreme Pro | U. GURU LIKHITH REDDY</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="trophy-overlay" class="trophy-hidden">
-        <div class="trophy-card">
-            <div class="trophy-icon">🏆</div>
-            <h1>CHAMPION STATUS</h1>
-            <p>30 Days of Pure Discipline. Great work, Nani!</p>
-            <button onclick="closeTrophy()">CONTINUE</button>
-        </div>
-    </div>
+    <div class="zenith-container">
+        <aside class="sidebar no-print">
+            <div class="sidebar-inner">
+                <div class="brand-block">
+                    <div class="orb-avatar">N</div>
+                    <h2 class="user-id">U. GURU LIKHITH REDDY</h2>
+                    <div class="status-indicator">● NEURAL CORE ACTIVE</div>
+                </div>
 
-    <div class="app-layout">
-        <aside class="sidebar">
-            <div class="brand">
-                <div class="logo">N</div>
-                <div class="brand-text">
-                    <div class="u-name">U.Guru Likhith Reddy</div>
-                    <div class="u-badge">ELITE PROTOCOL</div>
+                <div class="module-stack">
+                    <div class="module glass alert-pulse">
+                        <label class="section-tag">DIET PROTOCOL</label>
+                        <div id="sidebar-next-meal" class="telemetry-value">Syncing Data...</div>
+                    </div>
+
+                    <div class="telemetry-grid">
+                        <div class="module glass mini">
+                            <label class="section-tag">UPTIME</label>
+                            <div id="real-time-clock" class="mono-data emerald">00:00:00</div>
+                        </div>
+                        <div class="module glass mini">
+                            <label class="section-tag">STREAK</label>
+                            <div id="streak-display" class="mono-data gold">🔥 0</div>
+                        </div>
+                    </div>
+
+                    <div class="engine-glass">
+                        <label class="section-tag">ZENITH ENGINE</label>
+                        <div id="stopwatch-text" class="timer-display blue">00:00:00</div>
+                        <div class="engine-subtext">SYSTEM STANDBY</div>
+                    </div>
+                </div>
+
+                <div class="sidebar-footer">
+                    <button onclick="window.print()" class="btn-sidebar-archive">🖨️ EXPORT FULL ARCHIVE</button>
+                    <button id="reset-btn" class="btn-sidebar-wipe">🗑️ WIPE CLOUD HISTORY</button>
                 </div>
             </div>
-
-            <div class="side-item">
-                <label>LIVE SESSION</label>
-                <div id="stopwatch-text" class="timer-display">00:00:00</div>
-                <button onclick="toggleGymSession()" id="session-btn" class="btn-blue">START SESSION</button>
-            </div>
-
-            <div class="side-item">
-                <label>RECOVERY MONITOR</label>
-                <div class="time-row">
-                    <input type="time" id="bed-time" onchange="calculateSleep()">
-                    <input type="time" id="wake-time" onchange="calculateSleep()">
-                </div>
-                <div class="sleep-stat" id="sleep-result">0h 0m</div>
-                <div class="stars" id="star-container">
-                    <span onclick="setStars(1)">☆</span><span onclick="setStars(2)">☆</span><span onclick="setStars(3)">☆</span><span onclick="setStars(4)">☆</span><span onclick="setStars(5)">☆</span>
-                </div>
-                <button onclick="saveSleepToCloud()" class="btn-ghost">LOG RECOVERY</button>
-            </div>
-
-            <div class="side-item rules">
-                <label>STRICT RULES</label>
-                <div class="rule-box">🚫 No Sugar</div>
-                <div class="rule-box">🥛 No Raw Curd</div>
-                <div class="rule-box">🛑 No Side Planks</div>
-            </div>
-
-            <button id="reset-btn" class="btn-danger">RESET CLOUD DATA</button>
         </aside>
 
-        <main class="dashboard">
-            <header class="top-nav">
-                <div>
-                    <h1>Active Evolution</h1>
-                    <p id="header-date">...</p>
+        <main class="dashboard-portal">
+            <header class="hub-header no-print">
+                <div class="header-left">
+                    <h1 class="portal-heading">Evolution Hub</h1>
+                    <div class="telemetry-bar">
+                        <span id="hub-day-name" class="day-label">...</span>
+                        <span class="sep">/</span>
+                        <span id="hub-full-date" class="date-label">...</span>
+                        <span id="days-left-tag" class="countdown-badge-extreme">... DAYS LEFT</span>
+                    </div>
                 </div>
-                <div class="prog-wrapper">
-                    <div class="prog-label">Completion: <span id="pct-text">0%</span></div>
-                    <div class="bar-bg"><div id="progress-fill"></div></div>
+                <div class="header-right">
+                    <div class="efficiency-container">
+                        <div class="efficiency-meta">PROTOCOL EFFICIENCY: <span id="pct-text">0%</span></div>
+                        <div class="progress-rail-extreme"><div id="progress-fill"></div></div>
+                    </div>
                 </div>
             </header>
 
-            <div id="workout-grid" class="workout-grid"></div>
+            <div id="workout-grid" class="rigid-grid"></div>
         </main>
     </div>
+
+    <canvas id="victory-canvas" class="no-print"></canvas>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
